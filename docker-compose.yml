@@ -11,14 +11,26 @@ services:
     networks:
       - backend
       - front
+    .env_file:
+      - .env
+    environment:
+      - MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017
+      - REDIS_URI: redis://redis:6379 
+      - ENABLE_WRITING_HANDLERS: "false"
 
-
-  mongo:
+  mongodb:
     image: mongo:8.0-rc
     networks:
       - backend
-    
+    .env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      
   mongo-express:
+    .env_file:
+      - .env
     image: mongo-express:1.0-20-alpine3.19
     depends_on:
       - mongo
@@ -27,6 +39,11 @@ services:
     ports:
       - "8081:8081"
     restart: always #fixes MongoNetworkError caused by mongodb not being ready when mongo-express starts
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_EXPRESS_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_EXPRESS_PASSWORD}
+      ME_CONFIG_MONGODB_SERVER: mongodb
+
     
   redis:
     image: redis:alpine
