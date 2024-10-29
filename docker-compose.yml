@@ -12,11 +12,12 @@ services:
       - backend
       - front
 
+
   mongo:
     image: mongo:8.0-rc
     networks:
       - backend
-
+    
   mongo-express:
     image: mongo-express:1.0-20-alpine3.19
     depends_on:
@@ -25,3 +26,12 @@ services:
       - backend
     ports:
       - "8081:8081"
+    restart: always #fixes MongoNetworkError caused by mongodb not being ready when mongo-express starts
+    
+  redis:
+    image: redis:alpine
+    networks:
+      -cache
+      
+
+    
