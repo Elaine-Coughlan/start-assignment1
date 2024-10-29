@@ -1,44 +1,52 @@
+networks:
+  app_network:
+  db_network:
+
+
 services:
 
   api:
     image: doconnor/movies-api:1.0
     container_name: movies-api
     ports:
-      - '3000:3000'
+      - '9000:9000'
     depends_on:
       - mongodb
-      - redis
-    networks:
-      - backend
-      - front
     env_file:
       - .env
     environment:
-      MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017
+      MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017
       REDIS_URI: redis://redis:6379 
       ENABLE_WRITING_HANDLERS: "false"
+    networks:
+      - db_network
+      - app_network
 
   mongodb:
+    container_name: mongoDB
     image: mongo:8.0-rc
     networks:
-      - backend
+      - db_network
     env_file:
       - .env
+    ports:
+      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
 
   mongo-express:
+    container_name: express 
     env_file:
       - .env
     image: mongo-express:1.0-20-alpine3.19
+    networks:
+      - db_network
     depends_on:
       - mongodb
-    networks:
-      - backend
+    restart: always #fixes MongoNetworkError caused by mongodb not being ready when mongo-express starts
     ports:
       - "8081:8081"
-    restart: always #fixes MongoNetworkError caused by mongodb not being ready when mongo-express starts
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${ME_CONFIG_MONGODB_ADMINUSERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${ME_CONFIG_MONGODB_ADMINUSERPASSWORD}
@@ -48,14 +56,10 @@ services:
   redis:
     image: redis:alpine
     networks:
-      - front
+     - app_network
 
   
-networks:
-  backend:
-    driver: bridge
-  front:
-    driver: bridge
+
 
   
       
