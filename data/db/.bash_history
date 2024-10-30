@@ -7,3 +7,5 @@ mongoimport --db movies --collection entries --file /jsonfile.json  --jsonArray 
 mongoimport --db movies --collection entries --file /seeding.json  --jsonArray --authenticationDatabase admin -u admin -p secret1
 mongoimport --db movies --collection entries --file /seeding.json  --jsonArray --authenticationDatabase admin -u admin -p secret
 exit
+mongoimport --db tmdb_movies --collection movies --file /seeding.json  --jsonArray --authenticationDatabase admin -u admin -p secret
+exit

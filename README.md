@@ -12,7 +12,7 @@ For the above commit line, I tried running the command but kept getting errors b
 2024-10-29 18:34:32 mongo-express-1  | /docker-entrypoint.sh: line 15: /dev/tcp/mongo/27017: Invalid argument
 This the error found in the logs after the command showed the network and containers had been created and started, (After a soft reboot, the jet engine noise stopped too). Typo was fixed.
 
-Seeding feature implentation
+Seeding feature implentation, Used help from this site: https://platformengineers.io/blog/seeding-a-mongo-db-database-using-docker-compose/ and stackoverflow but didnt help.
 Tried to add a seed.js file to initialise the data but failed.
 
 //Adding the data manually through docker exec
@@ -21,4 +21,9 @@ Doing it this did add the data to the databse.
 
 Localhost:9000 showing connected message with ping messages. Tried but this is the only working result. Rest of the time the container exit. The logs for the container while running are empty.
 
+/movies shows empty json result. express shows entries so could be database name set up or endpoints
 
+After rewatching agile lecture recording changed this command to 
+root@bc488f811acb:/# mongoimport --db tmdb_movies --collection movies --file /seeding.json  --jsonArray --authenticationDatabase admin -u admin -p secret
+
+Now the /movies shows data from the database 

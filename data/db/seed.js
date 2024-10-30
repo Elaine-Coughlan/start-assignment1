@@ -1,4 +1,4 @@
-db = connect("mongodb://admin:secret@localhost:27017/movies");
+db = connect("mongodb://admin:secret@localhost:27017/tmbd_movies");
 var data = [
     {
       "overview": "After a shipwreck, an intelligent robot called Roz is stranded on an uninhabited island. To survive the harsh environment, Roz bonds with the island's animals and cares for an orphaned baby goose.",
@@ -121,5 +121,5 @@ var data = [
       "name": "Trouble"
     }
   ]
-  ;  // Paste the content of your JSON file here
-db.entries.insertMany(data);
+  ; 
+db.movies.insertMany(data);

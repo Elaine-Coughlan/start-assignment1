@@ -3,7 +3,6 @@ networks:
   db_network:
   mongo_network:
 
-
 services:
 
   api:
