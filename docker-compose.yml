@@ -1,6 +1,7 @@
 networks:
   app_network:
   db_network:
+  mongo_network:
 
 
 services:
@@ -27,10 +28,9 @@ services:
     image: mongo:8.0-rc
     networks:
       - db_network
+      - mongo_network
     env_file:
       - .env
-    ports:
-      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
@@ -41,7 +41,7 @@ services:
       - .env
     image: mongo-express:1.0-20-alpine3.19
     networks:
-      - db_network
+      - mongo_network
     depends_on:
       - mongodb
     restart: always #fixes MongoNetworkError caused by mongodb not being ready when mongo-express starts
